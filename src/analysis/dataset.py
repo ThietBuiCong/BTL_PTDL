@@ -1,7 +1,6 @@
 import pandas as pd
 import os
 
-
 def fetch_dataset():
     """
     Đọc bộ dữ liệu từ file CSV có sẵn.
@@ -18,14 +17,14 @@ def fetch_dataset():
         CURRENT_DIR,
         "..",
         "data",
-        "diabetes_binary_5050split_health_indicators_BRFSS2015.csv"
+        "hospital_readmission.csv"
     )
 
     # Đọc dữ liệu
     df = pd.read_csv(DATA_PATH)
 
     # Tách Features và Target
-    X = df.drop(columns=["Diabetes_binary"])
-    y = df[["Diabetes_binary"]]
+    X = df.drop(columns=["readmitted_30days"])
+    y = df[["readmitted_30days"]]
 
     return X, y

@@ -1,14 +1,24 @@
 from dataset import fetch_dataset
-from train import train_model, test_model
+from train import (
+    grid_search_logistic_regression,
+    grid_search_random_forest,
+    grid_search_xgboost,
+    test_model,
+    test_random_forest,
+    test_xgboost,
+)
+from clean_dataset import build_preprocessor, clean_features
+from train import (
+    grid_search_random_forest,
+    grid_search_xgboost,
+    test_random_forest,
+    test_xgboost,
+)
 
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import MinMaxScaler, StandardScaler, OneHotEncoder
-from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import train_test_split
 import os
 
@@ -93,41 +103,6 @@ def thong_ke(X, y):
     plt.show()
 
 
-def scaler(X):
-    """
-    Xây dựng pipeline tiền xử lý dữ liệu.
-
-    - Feature số: StandardScaler
-    """
-    if not isinstance(X, pd.DataFrame):
-        X = pd.DataFrame(X)
-        
-    numeric_features = X.select_dtypes(
-        include=["number"]
-    ).columns.tolist()
-
-    numeric_transformer = Pipeline(steps=[
-        ("scaler", MinMaxScaler(feature_range=(-1, 1)))
-    ])
-
-    preprocessor = ColumnTransformer(
-        transformers=[
-            ("num", numeric_transformer, numeric_features)
-        ],
-        remainder="passthrough"
-    )
-
-    # Thực hiện tiền xử lý
-    X_scaled = preprocessor.fit_transform(X)
-
-    print("\n========== TIỀN XỬ LÝ DỮ LIỆU ==========")
-    print(f"Số Feature số: {len(numeric_features)}")
-    print(f"Kích thước dữ liệu ban đầu: {X.shape}")
-    print(f"Kích thước dữ liệu sau xử lý: {X_scaled.shape}")
-
-    return X_scaled, preprocessor
-
-
 def main():
     """
     Hàm main để chạy chương trình
@@ -142,16 +117,31 @@ def main():
     # Thống kê dữ liệu
     # thong_ke(X, y)
 
-    # Tiền xử lý dữ liệu
-    X_scaled, preprocessor = scaler(X)
+    # Làm sạch giá trị đầu vào trước khi chia tập; fit tiền xử lý trên tập train.
+    X = clean_features(X)
     
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, stratify=y, random_state=42
     )
 
-    train_model(preprocessor, X_train, y_train)
-    model = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'models', 'logistic_regression_model.pkl')
+    preprocessor = build_preprocessor(X_train)
+
+    print("\n========== LOGISTIC REGRESSION ==========")
+    grid_search_logistic_regression(preprocessor, X_train, y_train, cv=3)
+    model = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        "models",
+        "logistic_regression_model.pkl",
+    )
     test_model(model, X_test, y_test)
+
+    print("\n========== RANDOM FOREST ==========")
+    grid_search_random_forest(preprocessor, X_train, y_train, cv=3)
+    test_random_forest(X_test, y_test)
+
+    print("\n========== XGBOOST ==========")
+    grid_search_xgboost(preprocessor, X_train, y_train, cv=3)
+    test_xgboost(X_test, y_test)
 
 
 if __name__ == "__main__":
