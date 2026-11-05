@@ -1,16 +1,23 @@
+import json
 import os
+from datetime import datetime, timezone
 
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
+import sklearn
+import xgboost
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     ConfusionMatrixDisplay,
+    accuracy_score,
     auc,
     confusion_matrix,
+    precision_recall_fscore_support,
+    roc_auc_score,
     roc_curve,
 )
 from sklearn.model_selection import train_test_split
@@ -106,6 +113,52 @@ def _save_feature_importance(model, strategy, model_name):
     plt.close(figure)
 
 
+def _evaluation_metadata(model, y_true, y_pred, y_score, strategy, model_name):
+    classifier = model.named_steps["classifier"]
+    matrix = confusion_matrix(y_true, y_pred, labels=[0, 1])
+    precision, recall, f1_score, _ = precision_recall_fscore_support(
+        y_true,
+        y_pred,
+        labels=[0, 1],
+        zero_division=0,
+    )
+    importance = _get_feature_importance(model)
+    return {
+        "imputation_strategy": strategy,
+        "model": model_name,
+        "metrics": {
+            "accuracy": float(accuracy_score(y_true, y_pred)),
+            "roc_auc": float(roc_auc_score(y_true, y_score)),
+            "classes": {
+                "0": {
+                    "precision": float(precision[0]),
+                    "recall": float(recall[0]),
+                    "f1_score": float(f1_score[0]),
+                },
+                "1": {
+                    "precision": float(precision[1]),
+                    "recall": float(recall[1]),
+                    "f1_score": float(f1_score[1]),
+                },
+            },
+        },
+        "confusion_matrix": {
+            "labels": ["No Readmission", "Readmission"],
+            "values": matrix.tolist(),
+        },
+        "classifier_parameters": classifier.get_params(deep=False),
+        "top_features": [
+            {"feature": feature, "importance": float(value)}
+            for feature, value in importance.head(15).items()
+        ],
+        "artifacts": {
+            "confusion_matrix": f"confusion_matrix_{strategy}_{model_name}.png",
+            "feature_importance": f"feature_importance_{strategy}_{model_name}.png",
+            "roc_curve": f"roc_auc_{strategy}.png",
+        },
+    }
+
+
 def _save_roc_curve(y_true, results, strategy):
     figure, axis = plt.subplots(figsize=(8, 6))
     for model_name, y_score in results.items():
@@ -149,6 +202,31 @@ def generate_evaluation_images():
         random_state=RANDOM_STATE,
     )
 
+    metadata = {
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "dataset": {
+            "file": "hospital_readmission.csv",
+            "samples": int(len(X)),
+            "features": list(X.columns),
+            "target": str(y.name),
+            "target_labels": {"0": "No Readmission", "1": "Readmission"},
+        },
+        "evaluation": {
+            "test_size": 0.2,
+            "train_samples": int(len(X_train)),
+            "test_samples": int(len(X_test)),
+            "stratified": True,
+            "random_state": RANDOM_STATE,
+            "positive_class": 1,
+        },
+        "versions": {
+            "pandas": pd.__version__,
+            "scikit_learn": sklearn.__version__,
+            "xgboost": xgboost.__version__,
+        },
+        "results": [],
+    }
+
     for strategy in ("mean", "most_frequent"):
         roc_scores = {}
         for model_name, classifier in _build_models().items():
@@ -163,10 +241,25 @@ def generate_evaluation_images():
             _save_confusion_matrix(y_test, y_pred, strategy, model_name)
             _save_feature_importance(pipeline, strategy, model_name)
             roc_scores[model_name] = y_score
+            metadata["results"].append(
+                _evaluation_metadata(
+                    pipeline,
+                    y_test,
+                    y_pred,
+                    y_score,
+                    strategy,
+                    model_name,
+                )
+            )
 
         _save_roc_curve(y_test, roc_scores, strategy)
 
+    metadata_path = os.path.join(OUTPUT_DIR, "evaluation_metadata.json")
+    with open(metadata_path, "w", encoding="utf-8") as metadata_file:
+        json.dump(metadata, metadata_file, ensure_ascii=False, indent=2)
+
     print(f"Evaluation images saved in: {os.path.abspath(OUTPUT_DIR)}")
+    print(f"Evaluation metadata saved to: {metadata_path}")
 
 
 if __name__ == "__main__":
