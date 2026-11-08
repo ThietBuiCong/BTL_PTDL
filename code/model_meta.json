@@ -1,0 +1,23 @@
+{
+  "feature_columns": [
+    "time_in_hospital",
+    "n_lab_procedures",
+    "n_procedures",
+    "n_medications",
+    "n_outpatient",
+    "n_inpatient",
+    "n_emergency",
+    "change",
+    "diabetes_med",
+    "Diabetes_ind",
+    "glucose_test_ind",
+    "A1Ctest_ind",
+    "age_t",
+    "medical_specialty",
+    "diag_1",
+    "diag_2",
+    "diag_3"
+  ],
+  "sklearn_version": "1.9.0",
+  "test_roc_auc": 0.644857974129166
+}

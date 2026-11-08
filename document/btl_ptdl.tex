@@ -2,7 +2,9 @@
 \usepackage[utf8]{inputenc}
 \usepackage[utf8]{vietnam}
 \usepackage{geometry}
+\usepackage{graphicx}
 \geometry{a4paper, margin=2.5cm}
+
 
 \begin{document}
 
@@ -11,23 +13,71 @@
     KHOA CÔNG NGHỆ THÔNG TIN\\[0.2em]
     \rule{0.4\textwidth}{0.4pt}\\[1cm]
     
-    \LARGE\textbf{Phân tích các yếu tố và dự đoán khả năng bệnh nhân tái nhập viện}
+    \LARGE\textbf{Phân tích các yếu tố và dự đoán khả năng bệnh nhân tái nhập viện ở Mỹ}
 \end{center}
 
 \vspace{0.25cm}
 
 \begin{center}
-    \begin{tabular}{|c|c|}
-        \hline
-        \textbf{Môn học} & Phân tích dữ liệu\\
-        \hline
-        \textbf{Nhóm trưởng} & Trần Thị Thanh Thảo\\
-        \hline
-        \textbf{Thành viên} & Bùi Công Thiệt\\
-        \hline
-    \end{tabular}
+\textbf{Môn học:} Phân tích dữ liệu\\
 \end{center}
-\section*{Mở đầu}
-- Giới thiệu đề tài
 
+\textbf{Thành viên:} Trần Thị Thanh Thảo\textsuperscript{Nhóm trưởng}, Bùi Công Thiệt
+
+
+\section*{Tóm tắt}
+
+\section*{Giới thiệu}
+
+Trong thời gian gần đây, việc tái nhập viện của bệnh nhân đã trở thành một
+vấn đề quan trọng và được quan tâm trong lĩnh vực y tế. Tái nhập viện không chỉ
+ảnh hưởng đến sức khỏe của bệnh nhân mà còn là một thách thức lớn đối với
+hệ thống chăm sóc sức khỏe. Vì thế để góp phần giải quyết vấn đề này, việc
+phân tích các yếu tố ảnh hưởng đến khả năng tái nhập viện của bệnh nhân
+và dự đoán khả năng tái nhập viện.
+
+\section*{Các nghiên cứu liên quan}
+
+\section*{Quy trình nghiên cứu}
+Về bộ dữ liệu, bộ dữ liệu được nghiên cứu và tổng hợp bởi nhóm tác giả John Clore và cộng sự. Bộ dữ liệu được tổng hợp của
+130 bệnh viện ở Mỹ, với các chỉ số như race, gender,... với hơn 100.000 dòng dữ liệu.
+
+Thông tin bộ dữ liệu như sau:
+
+\begin{tabular}{|c|p{12cm}|}
+    \hline
+    \textbf{Tên bộ dữ liệu} & Diabetes 130-US Hospitals for Years 1999-2008\\
+    \hline
+    \textbf{Năm} & 2014\\
+    \hline
+    \textbf{Nguồn} & Clore, J., Cios, K., DeShazo, J., \& Strack, B. (2014). Diabetes 130-US Hospitals for Years 1999-2008 [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5230J\\
+    \hline
+    \textbf{Số thuộc tính} & 50\\
+    \hline
+    \textbf{Số bản ghi} & 101766 bản ghi\\
+    \hline
+    \textbf{Biến mục tiêu} & readmitted\\
+    \hline
+    \textbf{Có missing value} & Có \\
+    \hline
+    \textbf{Giấy phép} & Creative Commons Attribution 4.0 International (CC BY 4.0) license\\
+    \hline
+\end{tabular}
+
+Và như được đề cập, vì bộ dữ liệu có hiện tượng bị mất mát dữ liệu và trong quá trình kiểm tra các dữ liệu bị missing được thay bằng
+"?". Với dữ liệu với mục tiêu bao gồm các nhãn: ["No", "<30", ">30"], thì đây là bài toán phân loại đa lớp nhưng với số lượng nhãn hiện tại thì
+rất khó để làm phân loại đa lớp, như hình sau \ref{fig:target_distribution}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\textwidth]{../asset/target.png}
+    \caption{Phân bổ giá trị trong lớp Target}
+    \label{fig:target_distribution}
+\end{figure}
+
+\section*{Thực nghiệm}
+
+\section*{Thảo luận}
+
+\section*{Kết luận}
 \end{document}
