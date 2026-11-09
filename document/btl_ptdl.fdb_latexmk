@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1794236505.98568 "d:/Project/BTL-PTDL/document/btl_ptdl.tex" "btl_ptdl.pdf" "btl_ptdl" 1794236507.52331 0
+["pdflatex"] 1794237797.26434 "d:/Project/BTL-PTDL/document/btl_ptdl.tex" "btl_ptdl.pdf" "btl_ptdl" 1794237798.83548 0
   "../asset/ROC_AUC.png" 1794218045 83715 e3c4d6ebb9cb7ec9734445221e4008cf ""
   "../asset/balance_acc.png" 1794217787 24053 359317bbdf6a3f35cf059a2ec057e50a ""
   "../asset/feature_importance.png" 1794236277 242255 f3090b771ee3e594e1938c83d938a9bf ""
@@ -73,9 +73,9 @@
   "C:/Users/skyge/AppData/Local/Programs/MiKTeX/tex/latex/vntex/t5enc.def" 1368738347 21986 ccb3b8f7cc27fbd61b3daabbbb82ad3f ""
   "C:/Users/skyge/AppData/Local/Programs/MiKTeX/tex/latex/vntex/t5enc.dfu" 1368738347 13949 387dd4fa58aea5f873839c93430fffed ""
   "C:/Users/skyge/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
-  "btl_ptdl.aux" 1794236507 2360 5b7af83dd444da13e36fd05c5f681be3 "pdflatex"
-  "btl_ptdl.tex" 1794236505 14816 eee8d64142a6e7451624e139c3fefe47 ""
-  "d:/Project/BTL-PTDL/document/btl_ptdl.tex" 1794236505 14816 eee8d64142a6e7451624e139c3fefe47 ""
+  "btl_ptdl.aux" 1794237798 2360 5b7af83dd444da13e36fd05c5f681be3 "pdflatex"
+  "btl_ptdl.tex" 1794237796 14884 c350290934bb05b9702e44552c5ac6ab ""
+  "d:/Project/BTL-PTDL/document/btl_ptdl.tex" 1794237796 14884 c350290934bb05b9702e44552c5ac6ab ""
   (generated)
   "btl_ptdl.aux"
   "btl_ptdl.log"
