@@ -1,8 +1,13 @@
 \documentclass[12pt]{report} % Khuyên dùng 12pt chuẩn, hoặc dùng exttreport nếu bắt buộc 13pt
 \usepackage[utf8]{inputenc}
-\usepackage[utf8]{vietnam}
+\usepackage[T5]{fontenc}
 \usepackage{geometry}
+\usepackage{float}
+\usepackage{lmodern}
 \usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\setlength{\parindent}{0pt}
 \geometry{a4paper, margin=2.5cm}
 
 
@@ -13,7 +18,7 @@
     KHOA CÔNG NGHỆ THÔNG TIN\\[0.2em]
     \rule{0.4\textwidth}{0.4pt}\\[1cm]
     
-    \LARGE\textbf{Phân tích các yếu tố và dự đoán khả năng bệnh nhân tái nhập viện ở Mỹ}
+    \LARGE\textbf{Phân tích các yếu tố và ứng dụng Học Máy dự đoán khả năng bệnh nhân tái nhập viện ở Mỹ}
 \end{center}
 
 \vspace{0.25cm}
@@ -27,6 +32,12 @@
 
 \section*{Tóm tắt}
 
+Sức khỏe là một trong các yếu tố ảnh hưởng đến đời sống của người dân, đặc biệt là tình trạng tái nhập viện cũng phản ánh được một phần sức khỏe của người dân.
+Với bộ dữ liệu \ref{table:description_data} là dữ liệu tới tình trạng sức khỏe và tỉ lệ tái nhập viện của bệnh nhân. Từ đó, ứng dụng các thuật toán ML để dự đoán khả 
+năng tái nhập viện bằng cách ứng dụng các thuật toán Logistic Regression, Random Forest, XGBoost, LightGBM và kết quả mang lại rất khá ổn với chỉ số Accuracy đạt 65.1\% và ROC-AUC đạt 70.9\%. Bên cạnh đó
+vẫn còn một số hạn chế mà phải cần cải thiện, đặc biệt là bộ dữ liệu cần được cập nhật phù hợp với tình trạng ở các năm gần đây hơn, ngoài ra vẫn chưa ứng dụng được các mô hình tiên tiến để nâng cao hiệu năng
+của mô hình và khai thác hết tiềm năng dữ liệu.
+
 \section*{Giới thiệu}
 
 Trong thời gian gần đây, việc tái nhập viện của bệnh nhân đã trở thành một
@@ -36,15 +47,16 @@ hệ thống chăm sóc sức khỏe. Vì thế để góp phần giải quyết
 phân tích các yếu tố ảnh hưởng đến khả năng tái nhập viện của bệnh nhân
 và dự đoán khả năng tái nhập viện.
 
-\section*{Các nghiên cứu liên quan}
-
-\section*{Quy trình nghiên cứu}
+\section*{Khám phá dữ liệu}
 Về bộ dữ liệu, bộ dữ liệu được nghiên cứu và tổng hợp bởi nhóm tác giả John Clore và cộng sự. Bộ dữ liệu được tổng hợp của
 130 bệnh viện ở Mỹ, với các chỉ số như race, gender,... với hơn 100.000 dòng dữ liệu.
 
 Thông tin bộ dữ liệu như sau:
 
-\begin{tabular}{|c|p{12cm}|}
+\begin{table}
+    \caption{Bảng mô tả bộ dữ liệu}
+    \label{table:description_data}
+    \begin{tabular}{|c|p{12cm}|}
     \hline
     \textbf{Tên bộ dữ liệu} & Diabetes 130-US Hospitals for Years 1999-2008\\
     \hline
@@ -63,21 +75,164 @@ Thông tin bộ dữ liệu như sau:
     \textbf{Giấy phép} & Creative Commons Attribution 4.0 International (CC BY 4.0) license\\
     \hline
 \end{tabular}
+\end{table}
+
+Kiểm tra sự phân bổ của các thuộc tính cũng là một phần quan trọng để xác định tính chính xác của dữ liệu. Dữ liệu dạng số được thể hiện thông qua các hình \ref{fig:data_overview} và \ref{fig:matrix_corr}.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{../asset/group1.png}
+        \caption{Phân bổ của các thuộc tính số ở Nhóm 1}
+        \label{fig:target}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{../asset/group2.png}
+        \caption{Phân bổ của các thuộc tính số ở Nhóm 2}
+        \label{fig:missing}
+    \end{subfigure}
+
+    \caption{Tổng quan dữ liệu}
+    \label{fig:data_overview}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{../asset/matrix_corr.png}
+    \caption{Ma trận tương quan giữa các thuộc tính}
+    \label{fig:matrix_corr}
+\end{figure}
 
 Và như được đề cập, vì bộ dữ liệu có hiện tượng bị mất mát dữ liệu và trong quá trình kiểm tra các dữ liệu bị missing được thay bằng
 "?". Với dữ liệu với mục tiêu bao gồm các nhãn: ["No", "<30", ">30"], thì đây là bài toán phân loại đa lớp nhưng với số lượng nhãn hiện tại thì
 rất khó để làm phân loại đa lớp, như hình sau \ref{fig:target_distribution}.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{../asset/target.png}
     \caption{Phân bổ giá trị trong lớp Target}
     \label{fig:target_distribution}
 \end{figure}
 
-\section*{Thực nghiệm}
+\section*{Phương pháp}
 
-\section*{Thảo luận}
+Để xử lý các giá trị missing, chuyển đổi các giá trị đang là "?" thành giá trị rỗng(NULL/None) để xử lý, ngoài ra các đặc trưng bị missing value nhiều như hình \ref{fig:missing_value} thì sẽ thực hiện bỏ thuộc tính đó để tránh gây ra tình trạng 
+sai lệch dữ liệu.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../asset/missing.png}
+    \caption{Biểu đồ thể hiện Missing value của các cột}
+    \label{fig:missing_value}
+\end{figure}
+
+Theo hình \ref{fig:missing_value}, các đặc trưng như \texttt{weight},
+\texttt{payer\_code} và \texttt{medical\_specialty} có số lượng giá trị
+bị thiếu đáng kể. Vì vậy, phải loại bỏ ba thuộc tính này
+trước khi thực hiện các bước tiền xử lý dữ liệu tiếp theo.
+
+Về tiền xử lý dữ liệu, sau khi loại bỏ 3 cột bị missing thì kết quả trả về ta được 11 cột dạng Numeric và 34 cột dạng Category.
+Thực hiện việc thay đổi tất cả "?" thành rỗng, sau đó tạo biến mục tiêu(Target) do dữ liệu gốc dành cho phân loại đa lớp, việc xử
+lý lại giúp bài toán trở thành phân lớp nhị phân(0 hoặc 1), với các giá trị là \texttt{No} thì là 0 và 1 cho các giá trị còn lại("<30" và ">30")
+có nghĩa kết quả đầu ra mong muốn chỉ cần biết bệnh nhân có tái nhập viện không và không cần xác định số ngày.
+
+Thực hiện việc loại bỏ 2 cột là \texttt{encounter\_id} và \texttt{patient\_nbr} nhưng lưu tạm dữ liệu của \texttt{patient\_nbr} để thực hiện việc chia tập dữ liệu
+
+Chia tập dữ liệu bằng cách chia theo nhóm, cách này sẽ hạn chế nhất các giá trị bị trùng lập trong 2 tập Train và Test. Việc chia nhóm được chia dự trên \texttt{patient\_nbr} vì vẫn có những bệnh nhân trở lại nhiều lần,
+chia dữ liệu là 80\% cho tập Train và 20\% cho tập Test. Sau khi chia và kiểm tra không có sự mất cân bằng lớp(class 0: 54.651913 và class 1: 45.348087) 
+
+Xây dựng quy trình để Tiền xử lý cho loại dữ liệu dạng Numeric và Category. Đối với dữ liệu dạng số thực hiện xử lý các giá trị rỗng bằng giá trị trung vị, và dạng Category là tần suất xuất hiện nhiều nhất. Các model được lựa chọn để thử nghiệm là
+Logistic Regression, Random Forest, XGBoost, LightGBM, và thực hiện một phép thử nhiều mô hình với Lazy Predict. 
+
+
+\section*{Kết quả}
+\begin{table}[H]
+\centering
+\caption{So sánh hiệu năng các mô hình học máy}
+\label{tab:model_performance}
+    \begin{tabular}{|l|l|l|l|l|l|}
+        \hline
+        \textbf{Mô hình} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} & \textbf{ROC-AUC} \\
+        \hline
+        LightGBM              & \textcolor{red}{0.651} & 0.628 & 0.563 & 0.594 & \textcolor{red}{0.709} \\
+        XGBoost               & \textcolor{red}{0.651} & \textcolor{red}{0.637} & 0.538 & 0.583 & 0.707 \\
+        Random Forest         & 0.637 & 0.596 & \textcolor{red}{0.618} & \textcolor{red}{0.607} & 0.687 \\
+        Logistic Regression   & 0.628 & 0.591 & 0.584 & 0.588 & 0.673 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../asset/balance_acc.png}\
+    \caption{So sánh các mô hình dựa trên chỉ số Balance Accuracy}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{../asset/metrics.png}\
+    \caption{So sánh các mô hình dựa trên các chỉ số}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{../asset/ROC_AUC.png}\
+    \caption{So sánh các mô hình dựa trên các chỉ số ROC và AUC}
+\end{figure}
+
+Kết quả thực nghiệm ở Bảng~\ref{tab:model_performance} cho thấy các mô hình học kết hợp (Ensemble) dựa trên cây quyết định đều vượt trội hơn mô hình tuyến tính cơ sở (\textbf{Logistic Regression}).
+
+\begin{itemize}
+    \item {Hiệu năng tổng thể:} \textbf{LightGBM} và \textbf{XGBoost} cùng đạt Accuracy cao nhất (\textbf{0.651}), trong đó \textbf{LightGBM} dẫn đầu về khả năng phân tách lớp với ROC-AUC đạt \textbf{0.709} (nhỉnh hơn XGBoost ở mức \textbf{0.707}).
+    \item {Sự đánh đổi Precision - Recall:} \textbf{XGBoost} có độ chuẩn xác cao nhất (Precision \textbf{0.637}) nhưng dễ bỏ sót mẫu dương tính (Recall thấp nhất, \textbf{0.538}). Ngược lại, \textbf{Random Forest} đạt độ phủ vượt trội (Recall \textbf{0.618}), giúp cân bằng tốt nhất với điểm F1-score cao nhất toàn bảng (\textbf{0.607}).
+\end{itemize}
+
+Vì thế việc lựa chọn mô hình đều tùy thuộc vào nhu cầu như khả năng chính xác cao hay tỉ lệ bỏ sót thấp.
+
+\begin{table}[htbp]
+\centering
+\caption{So sánh hiệu năng toàn bộ các mô hình học máy}
+\label{tab:all_models_performance}
+\resizebox{\textwidth}{!}{% Phóng to/thu nhỏ bảng vừa khít trang giấy}
+\begin{tabular}{lccccccc}
+\textbf{Model} & \textbf{Accuracy} & \textbf{Balanced Accuracy} & \textbf{ROC AUC} & \textbf{F1 Score} & \textbf{Precision} & \textbf{Recall} & \textbf{Time Taken} \\
+LGBMClassifier             & 0.621 & 0.613 & 0.661 & 0.619 & 0.619 & 0.621 & 0.969 \\
+RandomForestClassifier     & 0.620 & 0.607 & 0.656 & 0.612 & 0.617 & 0.620 & 5.379 \\
+AdaBoostClassifier         & 0.621 & 0.603 & 0.649 & 0.605 & 0.621 & 0.621 & 4.879 \\
+XGBClassifier              & 0.602 & 0.593 & 0.642 & 0.598 & 0.598 & 0.602 & 0.999 \\
+BernoulliNB                & 0.593 & 0.588 & 0.620 & 0.592 & 0.592 & 0.593 & 0.592 \\
+ExtraTreesClassifier       & 0.594 & 0.582 & 0.630 & 0.587 & 0.590 & 0.594 & 13.475 \\
+NearestCentroid            & 0.578 & 0.576 & 0.613 & 0.579 & 0.580 & 0.578 & 0.675 \\
+BaggingClassifier          & 0.586 & 0.572 & 0.619 & 0.577 & 0.581 & 0.586 & 4.855 \\
+CalibratedClassifierCV     & 0.590 & 0.566 & 0.595 & 0.559 & 0.590 & 0.590 & 29.201 \\
+NuSVC                      & 0.574 & 0.565 & 0.603 & 0.570 & 0.570 & 0.574 & 85.801 \\
+DecisionTreeClassifier     & 0.569 & 0.565 & 0.565 & 0.569 & 0.568 & 0.569 & 1.072 \\
+SVC                        & 0.578 & 0.564 & 0.604 & 0.569 & 0.572 & 0.578 & 62.246 \\
+LinearSVC                  & 0.570 & 0.562 & 0.595 & 0.567 & 0.567 & 0.570 & 7.443 \\
+LogisticRegression         & 0.570 & 0.561 & 0.587 & 0.566 & 0.566 & 0.570 & 0.760 \\
+RidgeClassifier            & 0.568 & 0.559 & 0.595 & 0.565 & 0.564 & 0.568 & 0.646 \\
+RidgeClassifierCV          & 0.568 & 0.559 & 0.595 & 0.565 & 0.564 & 0.568 & 1.697 \\
+LinearDiscriminantAnalysis & 0.568 & 0.559 & 0.595 & 0.565 & 0.564 & 0.568 & 2.422 \\
+SGDClassifier              & 0.555 & 0.548 & 0.557 & 0.553 & 0.553 & 0.555 & 2.998 \\
+KNeighborsClassifier       & 0.541 & 0.532 & 0.543 & 0.538 & 0.537 & 0.541 & 2.327 \\
+ExtraTreeClassifier        & 0.535 & 0.531 & 0.531 & 0.535 & 0.535 & 0.535 & 0.572 \\
+Perceptron                 & 0.529 & 0.523 & 0.538 & 0.528 & 0.527 & 0.529 & 0.757 \\
+PassiveAggressiveClassifier& 0.521 & 0.518 & 0.523 & 0.522 & 0.522 & 0.521 & 0.785 \\
+GaussianNB                 & 0.469 & 0.510 & 0.510 & 0.350 & 0.550 & 0.469 & 0.635 \\
+DummyClassifier            & 0.546 & 0.500 & 0.500 & 0.386 & 0.299 & 0.546 & 0.417 \\
+LabelSpreading             & 0.544 & 0.498 & nan   & 0.387 & 0.412 & 0.544 & 4.025 \\
+LabelPropagation           & 0.544 & 0.498 & nan   & 0.387 & 0.412 & 0.544 & 3.542 \\
+\end{tabular}%
+}
+\end{table}
 
 \section*{Kết luận}
+Dù kết quả vẫn chưa được như kỳ vọng, một phần cũng do bộ dữ liệu vẫn chưa đủ ổn định vì thế các mô hình học chưa được tốt,
+và với bài toán này chỉ áp dụng các thuật toán Machine Learning chưa ứng dụng các thuật toán Deep Learning nên kết quả vẫn còn khá thấp.
+Ngoài ra, dựa trên kết quả phân tích từ dữ liệu cho thấy rằng tỉ lệ người tái nhập viện vẫn còn cao đồng nghĩa với việc sức khỏe của người dân tại thời điểm đó
+ở nước Mỹ vẫn chưa ổn định đặc biệt các chỉ số liên quan đến bệnh tiểu đường vẫn còn cao và đó cũng là một đặc trưng ảnh hưởng đến tình trạng tái nhập viện của bệnh nhân.
+
+Trong tương lai tới có thể dùng các thuật toán và phương pháp xử lý thông minh để tránh được các vấn đề gây nhiễu dữ liệu. Và cập nhật dữ liệu mới trong thời điểm hiện tại để có dữ liệu trực quan hơn về sức khỏe của người dân ở Mỹ.
 \end{document}
