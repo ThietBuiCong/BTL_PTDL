@@ -371,7 +371,7 @@ def render_batch_prediction(models: dict, metrics: dict) -> None:
     first, second, third = st.columns(3)
     first.metric("Đa số dự đoán tái nhập viện", f"{positive:,}")
     second.metric("Đa số dự đoán không tái nhập viện", f"{negative:,}")
-    third.metric("Không đồng thuận", f"{split:,}")
+    # third.metric("Không đồng thuận", f"{split:,}")
     st.caption(best_model_summary(metrics))
     st.dataframe(results.head(100), width="stretch", hide_index=True)
     st.download_button(
