@@ -33,11 +33,10 @@
 
 \section*{Tóm tắt}
 
-Sức khỏe là một trong các yếu tố ảnh hưởng đến đời sống của người dân, đặc biệt là tình trạng tái nhập viện cũng phản ánh được một phần sức khỏe của người dân.
+Sức khỏe là một trong các yếu tố ảnh hưởng đến đời sống của con người, đặc biệt là tình trạng tái nhập viện cũng phản ánh được một phần sức khỏe của người dân.
 Với bộ dữ liệu \ref{table:description_data} là dữ liệu tới tình trạng sức khỏe và tỉ lệ tái nhập viện của bệnh nhân. Từ đó, ứng dụng các thuật toán ML để dự đoán khả 
 năng tái nhập viện bằng cách ứng dụng các thuật toán Logistic Regression, Random Forest, XGBoost, LightGBM và kết quả mang lại rất khá ổn với chỉ số Accuracy đạt 65.1\% và ROC-AUC đạt 70.9\%. Bên cạnh đó
-vẫn còn một số hạn chế mà phải cần cải thiện, đặc biệt là bộ dữ liệu cần được cập nhật phù hợp với tình trạng ở các năm gần đây hơn, ngoài ra vẫn chưa ứng dụng được các mô hình tiên tiến để nâng cao hiệu năng
-của mô hình và khai thác hết tiềm năng dữ liệu.
+vẫn còn một số hạn chế mà phải cần cải thiện, đặc biệt là bộ dữ liệu cần được cập nhật phù hợp với tình trạng ở các năm gần đây hơn, ngoài ra vẫn chưa ứng dụng được các mô hình tiên tiến để nâng cao hiệu năng và khai thác hết tiềm năng dữ liệu.
 
 \section*{Giới thiệu}
 
@@ -54,7 +53,7 @@ Về bộ dữ liệu, bộ dữ liệu được nghiên cứu và tổng hợp 
 
 Thông tin bộ dữ liệu như sau:
 
-\begin{table}
+\begin{table}[H]
     \caption{Bảng mô tả bộ dữ liệu}
     \label{table:description_data}
     \begin{tabular}{|c|p{12cm}|}
@@ -139,7 +138,7 @@ Thực hiện việc thay đổi tất cả "?" thành rỗng, sau đó tạo bi
 lý lại giúp bài toán trở thành phân lớp nhị phân(0 hoặc 1), với các giá trị là \texttt{No} thì là 0 và 1 cho các giá trị còn lại("<30" và ">30")
 có nghĩa kết quả đầu ra mong muốn chỉ cần biết bệnh nhân có tái nhập viện không và không cần xác định số ngày.
 
-Thực hiện việc loại bỏ 2 cột là \texttt{encounter\_id} và \texttt{patient\_nbr} nhưng lưu tạm dữ liệu của \texttt{patient\_nbr} để thực hiện việc chia tập dữ liệu
+Thực hiện việc loại bỏ 2 cột là \texttt{encounter\_id} và \texttt{patient\_nbr} nhưng lưu tạm dữ liệu của \texttt{patient\_nbr} để thực hiện việc chia tập dữ liệu.
 
 Chia tập dữ liệu bằng cách chia theo nhóm, cách này sẽ hạn chế nhất các giá trị bị trùng lập trong 2 tập Train và Test. Việc chia nhóm được chia dự trên \texttt{patient\_nbr} vì vẫn có những bệnh nhân trở lại nhiều lần,
 chia dữ liệu là 80\% cho tập Train và 20\% cho tập Test. Sau khi chia và kiểm tra không có sự mất cân bằng lớp(class 0: 54.651913 và class 1: 45.348087) 
@@ -237,7 +236,7 @@ LabelPropagation & 0.544 & 0.498 & nan & 0.387 & 0.412 & 0.544 & 3.542 \\
 
 \section*{Kết luận}
 Dù kết quả vẫn chưa được như kỳ vọng, một phần cũng do bộ dữ liệu vẫn chưa đủ ổn định vì thế các mô hình học chưa được tốt,
-và với bài toán này chỉ áp dụng các thuật toán Machine Learning chưa ứng dụng các thuật toán Deep Learning nên kết quả vẫn còn khá thấp.
+và với bài toán này chỉ áp dụng các thuật toán Machine Learning đơn giản.
 Ngoài ra, dựa trên kết quả phân tích từ dữ liệu cho thấy rằng tỉ lệ người tái nhập viện vẫn còn cao đồng nghĩa với việc sức khỏe của người dân tại thời điểm đó
 ở nước Mỹ vẫn chưa ổn định đặc biệt các chỉ số liên quan đến bệnh tiểu đường vẫn còn cao và đó cũng là một đặc trưng ảnh hưởng đến tình trạng tái nhập viện của bệnh nhân.
 

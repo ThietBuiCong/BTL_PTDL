@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.30)  9 NOV 2026 22:23
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.30)  9 NOV 2026 22:49
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -414,74 +414,75 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <6> on input line 30.
 
-Overfull \hbox (9.68642pt too wide) in paragraph at lines 60--79
+Overfull \hbox (9.68642pt too wide) in paragraph at lines 59--78
 [][] 
  []
 
-<../asset/group1.png, id=1, 1061.6463pt x 703.1871pt>
-File: ../asset/group1.png Graphic file (type png)
-<use ../asset/group1.png>
-Package pdftex.def Info: ../asset/group1.png  used on input line 87.
-(pdftex.def)             Requested size: 218.51521pt x 144.73369pt.
-<../asset/group2.png, id=3, 919.9971pt x 586.8324pt>
-File: ../asset/group2.png Graphic file (type png)
-<use ../asset/group2.png>
-Package pdftex.def Info: ../asset/group2.png  used on input line 94.
-(pdftex.def)             Requested size: 218.51521pt x 139.38309pt.
-<../asset/matrix_corr.png, id=4, 1051.5285pt x 847.7271pt>
-File: ../asset/matrix_corr.png Graphic file (type png)
-<use ../asset/matrix_corr.png>
-Package pdftex.def Info: ../asset/matrix_corr.png  used on input line 104.
-(pdftex.def)             Requested size: 273.14923pt x 220.20981pt.
 [1
 
-{C:/Users/skyge/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/skyge/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-t5.enc}] [2 <../asset/group1.png> <../asset/group2.png> <../asset/matrix_corr.png>]
+{C:/Users/skyge/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/skyge/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-t5.enc}]
+<../asset/group1.png, id=8, 1061.6463pt x 703.1871pt>
+File: ../asset/group1.png Graphic file (type png)
+<use ../asset/group1.png>
+Package pdftex.def Info: ../asset/group1.png  used on input line 86.
+(pdftex.def)             Requested size: 218.51521pt x 144.73369pt.
+<../asset/group2.png, id=10, 919.9971pt x 586.8324pt>
+File: ../asset/group2.png Graphic file (type png)
+<use ../asset/group2.png>
+Package pdftex.def Info: ../asset/group2.png  used on input line 93.
+(pdftex.def)             Requested size: 218.51521pt x 139.38309pt.
+<../asset/matrix_corr.png, id=11, 1051.5285pt x 847.7271pt>
+File: ../asset/matrix_corr.png Graphic file (type png)
+<use ../asset/matrix_corr.png>
+Package pdftex.def Info: ../asset/matrix_corr.png  used on input line 103.
+(pdftex.def)             Requested size: 273.14923pt x 220.20981pt.
+ [2 <../asset/group1.png> <../asset/group2.png> <../asset/matrix_corr.png>]
 <../asset/target.png, id=19, 474.8139pt x 494.3268pt>
 File: ../asset/target.png Graphic file (type png)
 <use ../asset/target.png>
-Package pdftex.def Info: ../asset/target.png  used on input line 115.
+Package pdftex.def Info: ../asset/target.png  used on input line 114.
 (pdftex.def)             Requested size: 227.62206pt x 236.97244pt.
 
-Overfull \hbox (10.17311pt too wide) in paragraph at lines 122--124
+Overfull \hbox (10.17311pt too wide) in paragraph at lines 121--123
 \T5/lmr/m/n/12 ^^^º xû lþ c¡c gi¡ trà miss-ing, chuyºn ^^_êi c¡c gi¡ trà ^^_ang l  "?" th nh gi¡ trà réng(NULL/None)
  []
 
 <../asset/missing.png, id=20, 847.7271pt x 341.8371pt>
 File: ../asset/missing.png Graphic file (type png)
 <use ../asset/missing.png>
-Package pdftex.def Info: ../asset/missing.png  used on input line 127.
+Package pdftex.def Info: ../asset/missing.png  used on input line 126.
 (pdftex.def)             Requested size: 364.19667pt x 146.85667pt.
-LaTeX Font Info:    Trying to load font information for T5+lmtt on input line 132.
+LaTeX Font Info:    Trying to load font information for T5+lmtt on input line 131.
 (C:\Users\skyge\AppData\Local\Programs\MiKTeX\tex/latex/lm\t5lmtt.fd
 File: t5lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [3 <../asset/target.png> <../asset/missing.png>]
 <../asset/balance_acc.png, id=27, 630.9171pt x 341.8371pt>
 File: ../asset/balance_acc.png Graphic file (type png)
 <use ../asset/balance_acc.png>
-Package pdftex.def Info: ../asset/balance_acc.png  used on input line 170.
+Package pdftex.def Info: ../asset/balance_acc.png  used on input line 169.
 (pdftex.def)             Requested size: 364.19667pt x 197.32675pt.
 <../asset/metrics.png, id=28, 1417.2147pt x 660.5478pt>
 File: ../asset/metrics.png Graphic file (type png)
 <use ../asset/metrics.png>
-Package pdftex.def Info: ../asset/metrics.png  used on input line 176.
+Package pdftex.def Info: ../asset/metrics.png  used on input line 175.
 (pdftex.def)             Requested size: 432.48051pt x 201.57262pt.
  [4 <../asset/balance_acc.png>]
 <../asset/ROC_AUC.png, id=33, 703.1871pt x 486.3771pt>
 File: ../asset/ROC_AUC.png Graphic file (type png)
 <use ../asset/ROC_AUC.png>
-Package pdftex.def Info: ../asset/ROC_AUC.png  used on input line 182.
+Package pdftex.def Info: ../asset/ROC_AUC.png  used on input line 181.
 (pdftex.def)             Requested size: 432.48051pt x 299.14612pt.
 <../asset/feature_importance.png, id=34, 1196.0685pt x 705.3552pt>
 File: ../asset/feature_importance.png Graphic file (type png)
 <use ../asset/feature_importance.png>
-Package pdftex.def Info: ../asset/feature_importance.png  used on input line 188.
+Package pdftex.def Info: ../asset/feature_importance.png  used on input line 187.
 (pdftex.def)             Requested size: 432.48051pt x 255.03624pt.
  [5 <../asset/metrics.png> <../asset/ROC_AUC.png>]
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 195.
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 194.
  (C:\Users\skyge\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-Overfull \hbox (0.59741pt too wide) in paragraph at lines 195--196
+Overfull \hbox (0.59741pt too wide) in paragraph at lines 194--195
 []\T5/lmr/m/n/12 Hi»u n«ng têng thº: \T5/lmr/bx/n/12 Light-GBM \T5/lmr/m/n/12 v  \T5/lmr/bx/n/12 XG-Boost \T5/lmr/m/n/12 còng ^^_¤t Ac-cu-racy cao nh§t (\T5/lmr/bx/n/12 0.651\T5/lmr/m/n/12 ),
  []
 
@@ -500,7 +501,7 @@ Here is how much of TeX's memory you used:
  1141 hyphenation exceptions out of 8191
  67i,10n,77p,476b,503s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/skyge/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/skyge/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/skyge/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr12.pfb><C:/Users/skyge/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr8.pfb><C:/Users/skyge/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt12.pfb>
-Output written on btl_ptdl.pdf (7 pages, 913408 bytes).
+Output written on btl_ptdl.pdf (7 pages, 913350 bytes).
 PDF statistics:
  75 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

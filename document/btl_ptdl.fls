@@ -110,11 +110,13 @@ INPUT C:\Users\skyge\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\lmex10.tf
 INPUT C:\Users\skyge\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\t5-lmr8.tfm
 INPUT C:\Users\skyge\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\t5-lmr17.tfm
 INPUT C:\Users\skyge\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\t5-lmbx12.tfm
-INPUT ..\asset\group1.png
-INPUT ..\asset\group1.png
-INPUT ..\asset\group1.png
-INPUT ..\asset\group1.png
 OUTPUT btl_ptdl.pdf
+INPUT C:\Users\skyge\AppData\Local\MiKTeX\fonts\map\pdftex\pdftex.map
+INPUT C:\Users\skyge\AppData\Local\Programs\MiKTeX\fonts\enc\dvips\lm\lm-t5.enc
+INPUT ..\asset\group1.png
+INPUT ..\asset\group1.png
+INPUT ..\asset\group1.png
+INPUT ..\asset\group1.png
 INPUT ..\asset\group1.png
 INPUT ..\asset\group1.png
 INPUT ..\asset\group1.png
@@ -133,8 +135,6 @@ INPUT ..\asset\matrix_corr.png
 INPUT ..\asset\matrix_corr.png
 INPUT ..\asset\matrix_corr.png
 INPUT ..\asset\matrix_corr.png
-INPUT C:\Users\skyge\AppData\Local\MiKTeX\fonts\map\pdftex\pdftex.map
-INPUT C:\Users\skyge\AppData\Local\Programs\MiKTeX\fonts\enc\dvips\lm\lm-t5.enc
 INPUT ..\asset\target.png
 INPUT ..\asset\target.png
 INPUT ..\asset\target.png
