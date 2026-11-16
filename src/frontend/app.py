@@ -7,15 +7,15 @@ import pandas as pd
 import streamlit as st
 
 from modeling import (
-    ID_COLUMNS,
     ID_MAPPINGS,
     INPUT_COLUMNS,
     MEDICATION_COLUMNS,
     MODEL_NAMES,
-    NUMERIC_COLUMNS,
+    RETURN_TIMING_MODEL_NAME,
     build_feature_frame,
     model_file_path,
     predict_all,
+    predict_return_timing,
 )
 
 
@@ -82,6 +82,17 @@ def load_models() -> dict:
         model_name: joblib.load(model_file_path(MODELS_DIR, model_name))
         for model_name in MODEL_NAMES
     }
+
+
+@st.cache_resource
+def load_return_timing_model():
+    model_path = model_file_path(MODELS_DIR, RETURN_TIMING_MODEL_NAME)
+    if not model_path.is_file():
+        raise FileNotFoundError(
+            "Chưa có mô hình dự đoán thời điểm tái nhập viện. Hãy chạy "
+            "`python src\\frontend\\train_models.py` để huấn luyện."
+        )
+    return joblib.load(model_path)
 
 
 @st.cache_data
@@ -265,7 +276,7 @@ def render_single_prediction(models: dict, metrics: dict) -> None:
     try:
         features = build_feature_frame(pd.DataFrame([record], columns=INPUT_COLUMNS))
         predictions = predict_all(features, models)
-    except (ValueError, KeyError) as error:
+    except (FileNotFoundError, ValueError, KeyError) as error:
         st.error(f"Không thể thực hiện dự đoán: {error}")
         return
 
@@ -280,6 +291,27 @@ def render_single_prediction(models: dict, metrics: dict) -> None:
     conclusion = predictions["Kết luận tổng hợp"].iloc[0]
     positive_votes = int(predictions["Số mô hình dự đoán tái nhập viện"].iloc[0])
     average_probability = float(predictions["Xác suất trung bình"].iloc[0])
+    if conclusion == "Đa số dự đoán có tái nhập viện":
+        try:
+            timing = predict_return_timing(
+                features, load_return_timing_model()
+            ).iloc[0]
+        except (FileNotFoundError, ValueError, KeyError) as error:
+            st.error(f"Không thể dự đoán thời điểm tái nhập viện: {error}")
+            return
+        st.success(
+            f"Mô hình thời điểm dự đoán: "
+            f"{timing['Khoảng thời gian tái nhập viện']} "
+            f"(xác suất trong 30 ngày: "
+            f"{timing['Xác suất tái nhập viện trong 30 ngày']:.1%})."
+        )
+    elif conclusion == "Đa số dự đoán không tái nhập viện":
+        st.info("Không dự đoán tái nhập viện; bỏ qua mô hình dự đoán thời điểm.")
+    else:
+        st.info(
+            "Các mô hình chưa đồng thuận; bỏ qua mô hình dự đoán thời điểm."
+        )
+
     first, second = st.columns(2)
     first.metric("Kết luận tổng hợp", conclusion)
     second.metric("Xác suất trung bình", f"{average_probability:.1%}")
@@ -340,6 +372,28 @@ def render_batch_prediction(models: dict, metrics: dict) -> None:
         try:
             features = build_feature_frame(input_data)
             predictions = predict_all(features, models)
+            readmitted_mask = predictions["Kết luận tổng hợp"].eq(
+                "Đa số dự đoán có tái nhập viện"
+            )
+            predictions = predictions.copy()
+            predictions["Khoảng thời gian tái nhập viện"] = (
+                "Không áp dụng"
+            )
+            predictions["Xác suất tái nhập viện trong 30 ngày"] = pd.Series(
+                index=predictions.index, dtype="float64"
+            )
+            if readmitted_mask.any():
+                timing = predict_return_timing(
+                    features.loc[readmitted_mask],
+                    load_return_timing_model(),
+                )
+                predictions.loc[
+                    readmitted_mask, "Khoảng thời gian tái nhập viện"
+                ] = timing["Khoảng thời gian tái nhập viện"]
+                predictions.loc[
+                    readmitted_mask,
+                    "Xác suất tái nhập viện trong 30 ngày",
+                ] = timing["Xác suất tái nhập viện trong 30 ngày"]
             input_without_target = input_data.drop(
                 columns=["readmitted"], errors="ignore"
             ).reset_index(drop=True)
@@ -350,7 +404,7 @@ def render_batch_prediction(models: dict, metrics: dict) -> None:
             results.insert(0, "Mã dòng", range(1, len(results) + 1))
             st.session_state["bulk_file_key"] = file_key
             st.session_state["bulk_results"] = results
-        except (ValueError, KeyError) as error:
+        except (FileNotFoundError, ValueError, KeyError) as error:
             st.error(f"Không thể dự đoán CSV: {error}")
             return
 
@@ -367,11 +421,9 @@ def render_batch_prediction(models: dict, metrics: dict) -> None:
     negative = results["Kết luận tổng hợp"].eq(
         "Đa số dự đoán không tái nhập viện"
     ).sum()
-    split = results["Kết luận tổng hợp"].eq("Không đồng thuận (2–2)").sum()
-    first, second, third = st.columns(3)
-    first.metric("Đa số dự đoán tái nhập viện", f"{positive:,}")
-    second.metric("Đa số dự đoán không tái nhập viện", f"{negative:,}")
-    # third.metric("Không đồng thuận", f"{split:,}")
+    columns = st.columns(3)
+    columns[0].metric("Đa số dự đoán tái nhập viện", f"{positive:,}")
+    columns[1].metric("Đa số dự đoán không tái nhập viện", f"{negative:,}")
     st.caption(best_model_summary(metrics))
     st.dataframe(results.head(100), width="stretch", hide_index=True)
     st.download_button(

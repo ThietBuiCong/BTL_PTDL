@@ -23,6 +23,7 @@ MODEL_NAMES = (
     "XGBoost",
     "LightGBM",
 )
+RETURN_TIMING_MODEL_NAME = "Return Timing"
 
 ID_COLUMNS = (
     "admission_type_id",
@@ -271,9 +272,49 @@ def target_to_binary(values: pd.Series) -> pd.Series:
     return (~normalized.isin({"no", "0", "false"})).astype("int8")
 
 
+def target_to_return_timing(values: pd.Series) -> pd.Series:
+    normalized = values.astype(str).str.strip()
+    invalid = ~normalized.isin({"<30", ">30"})
+    if invalid.any():
+        invalid_values = sorted(normalized[invalid].unique())
+        raise ValueError(
+            "Nhãn thời điểm tái nhập viện chỉ nhận <30 hoặc >30; nhận được: "
+            + ", ".join(invalid_values)
+        )
+    return normalized.eq("<30").astype("int8")
+
+
+def build_return_timing_estimator() -> RandomForestClassifier:
+    return RandomForestClassifier(
+        n_estimators=120,
+        max_depth=9,
+        min_samples_leaf=5,
+        class_weight="balanced_subsample",
+        n_jobs=-1,
+        random_state=42,
+    )
+
+
 def model_file_path(models_dir: Path, model_name: str) -> Path:
     filename = model_name.lower().replace(" ", "_") + ".joblib"
     return models_dir / filename
+
+
+def predict_return_timing(
+    features: pd.DataFrame, model: Any
+) -> pd.DataFrame:
+    predicted_class = model.predict(features).astype(int)
+    positive_class_index = list(model.classes_).index(1)
+    probability = model.predict_proba(features)[:, positive_class_index]
+    return pd.DataFrame(
+        {
+            "Khoảng thời gian tái nhập viện": np.where(
+                predicted_class == 1, "Trong vòng 30 ngày", "Sau hơn 30 ngày"
+            ),
+            "Xác suất tái nhập viện trong 30 ngày": probability,
+        },
+        index=features.index,
+    )
 
 
 def predict_all(features: pd.DataFrame, models: dict[str, Any]) -> pd.DataFrame:

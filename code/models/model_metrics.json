@@ -83,5 +83,19 @@
       "F1": 0.5994704121574949,
       "ROC-AUC": 0.7115830237885421
     }
+  },
+  "return_timing_model": {
+    "positive_class": "<30",
+    "negative_class": ">30",
+    "training_rows": 46902,
+    "test_rows": 9444,
+    "patient_group_split": true,
+    "metrics": {
+      "Balanced accuracy": 0.591863183332493,
+      "Precision": 0.33042529989094876,
+      "Recall": 0.5274151436031331,
+      "F1": 0.40630238015420717,
+      "ROC-AUC": 0.6251303168990326
+    }
   }
 }
