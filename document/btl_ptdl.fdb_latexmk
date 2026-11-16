@@ -1,11 +1,12 @@
 # Fdb version 4
-["pdflatex"] 1794821243.92806 "d:/Project/BTL-PTDL/document/btl_ptdl.tex" "btl_ptdl.pdf" "btl_ptdl" 1794821245.34438 0
+["pdflatex"] 1794822188.9349 "d:/Project/BTL-PTDL/document/btl_ptdl.tex" "btl_ptdl.pdf" "btl_ptdl" 1794822190.63516 0
   "../asset/ROC_AUC.png" 1794820414 79321 4fb9db5f25acdff7d7f876e448958f16 ""
   "../asset/balance_acc.png" 1794217787 24053 359317bbdf6a3f35cf059a2ec057e50a ""
   "../asset/group1.png" 1794820962 87290 335132c51b5afc0b63ac318f7e68f976 ""
   "../asset/group2.png" 1794820971 57024 56964dc5fabc096a29e18ab02d33f44f ""
   "../asset/inpatient.png" 1794820327 30938 0628c18cdc36ffd071ae65e7edd9adf2 ""
   "../asset/matrix_corr.png" 1794215910 169534 58bc308311ed3d59905026fb69a5f624 ""
+  "../asset/pipeline.png" 1794822162 258887 86c2dda7164ab8d00974b8ef0bc954e7 ""
   "../asset/top_10.png" 1794819935 55157 dd15ad92c84a88d4a2d1a5edb4fe8c4e ""
   "C:/Users/skyge/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1784727703 94110 7beaf43b4320f11f2e2c24ff9a4e84e1 ""
   "C:/Users/skyge/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1780149534 13333487 b28437af2a317261a1fa71c8d1a465e0 ""
@@ -129,9 +130,9 @@
   "C:/Users/skyge/AppData/Local/Programs/MiKTeX/tex/latex/vntex/t5enc.def" 1368738347 21986 ccb3b8f7cc27fbd61b3daabbbb82ad3f ""
   "C:/Users/skyge/AppData/Local/Programs/MiKTeX/tex/latex/vntex/t5enc.dfu" 1368738347 13949 387dd4fa58aea5f873839c93430fffed ""
   "C:/Users/skyge/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
-  "btl_ptdl.aux" 1794821245 1577 2b7a1343386a8568f7c3a674e665e838 "pdflatex"
-  "btl_ptdl.tex" 1794821243 9643 e4d3c620d2fbd87907265f7eda03bbbd ""
-  "d:/Project/BTL-PTDL/document/btl_ptdl.tex" 1794821243 9643 e4d3c620d2fbd87907265f7eda03bbbd ""
+  "btl_ptdl.aux" 1794822190 1704 0ac5a54bb98080e1e0ba214af5525cd8 "pdflatex"
+  "btl_ptdl.tex" 1794822188 9802 02c39f0347cd6eca358c9d3ae7d16d3f ""
+  "d:/Project/BTL-PTDL/document/btl_ptdl.tex" 1794822188 9802 02c39f0347cd6eca358c9d3ae7d16d3f ""
   (generated)
   "btl_ptdl.aux"
   "btl_ptdl.log"
