@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1794820972.76142 "d:/Project/BTL-PTDL/document/btl_ptdl.tex" "btl_ptdl.pdf" "btl_ptdl" 1794820974.29308 0
+["pdflatex"] 1794821243.92806 "d:/Project/BTL-PTDL/document/btl_ptdl.tex" "btl_ptdl.pdf" "btl_ptdl" 1794821245.34438 0
   "../asset/ROC_AUC.png" 1794820414 79321 4fb9db5f25acdff7d7f876e448958f16 ""
   "../asset/balance_acc.png" 1794217787 24053 359317bbdf6a3f35cf059a2ec057e50a ""
   "../asset/group1.png" 1794820962 87290 335132c51b5afc0b63ac318f7e68f976 ""
@@ -25,13 +25,11 @@
   "C:/Users/skyge/AppData/Local/Programs/MiKTeX/fonts/tfm/public/lm/t5-lmr10.tfm" 1256929440 21100 164585fd17f1ac9cc5e6c58d0ba511df ""
   "C:/Users/skyge/AppData/Local/Programs/MiKTeX/fonts/tfm/public/lm/t5-lmr12.tfm" 1256929440 21132 be3d7683d9e7cc687a0acd99d4e8f5ec ""
   "C:/Users/skyge/AppData/Local/Programs/MiKTeX/fonts/tfm/public/lm/t5-lmr17.tfm" 1256929440 21164 3207f0418107c8aac3f141c388a23f7b ""
-  "C:/Users/skyge/AppData/Local/Programs/MiKTeX/fonts/tfm/public/lm/t5-lmr8.tfm" 1256929440 21128 5857c9db30ba8928a92305f149a40f4d ""
   "C:/Users/skyge/AppData/Local/Programs/MiKTeX/fonts/tfm/public/lm/t5-lmtt12.tfm" 1256929440 1348 de84128a77c72033d515f2510464f953 ""
   "C:/Users/skyge/AppData/Local/Programs/MiKTeX/fonts/tfm/vntex/vnr/vnr12.tfm" 1644004041 3984 be7b630197255361b12d153ce5e1bc5b ""
   "C:/Users/skyge/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb" 1256929440 116908 9a7a12d1e4df280ea0ab4aad83cdef88 ""
   "C:/Users/skyge/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb" 1256929440 119235 05e5c8d6d60439433e50047898c2c0e0 ""
   "C:/Users/skyge/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr12.pfb" 1256929440 113634 9384aebdf26f9881e046a4b5574566db ""
-  "C:/Users/skyge/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr8.pfb" 1256929440 122174 a2d5e73f396ddbeb3bdf5c79aea0993d ""
   "C:/Users/skyge/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt12.pfb" 1256929440 110323 19372944fba298bb4c4758abff959582 ""
   "C:/Users/skyge/AppData/Local/Programs/MiKTeX/tex/context/base/mkii/supp-pdf.mkii" 1580390158 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "C:/Users/skyge/AppData/Local/Programs/MiKTeX/tex/generic/iftex/iftex.sty" 1734114575 7984 7dbb9280f03c0a315425f1b4f35d43ee ""
@@ -131,9 +129,9 @@
   "C:/Users/skyge/AppData/Local/Programs/MiKTeX/tex/latex/vntex/t5enc.def" 1368738347 21986 ccb3b8f7cc27fbd61b3daabbbb82ad3f ""
   "C:/Users/skyge/AppData/Local/Programs/MiKTeX/tex/latex/vntex/t5enc.dfu" 1368738347 13949 387dd4fa58aea5f873839c93430fffed ""
   "C:/Users/skyge/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
-  "btl_ptdl.aux" 1794820974 1577 2b7a1343386a8568f7c3a674e665e838 "pdflatex"
-  "btl_ptdl.tex" 1794820972 9575 f76c9a2740c2aa9a2217db1f198b843d ""
-  "d:/Project/BTL-PTDL/document/btl_ptdl.tex" 1794820972 9575 f76c9a2740c2aa9a2217db1f198b843d ""
+  "btl_ptdl.aux" 1794821245 1577 2b7a1343386a8568f7c3a674e665e838 "pdflatex"
+  "btl_ptdl.tex" 1794821243 9643 e4d3c620d2fbd87907265f7eda03bbbd ""
+  "d:/Project/BTL-PTDL/document/btl_ptdl.tex" 1794821243 9643 e4d3c620d2fbd87907265f7eda03bbbd ""
   (generated)
   "btl_ptdl.aux"
   "btl_ptdl.log"
