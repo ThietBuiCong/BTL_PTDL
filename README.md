@@ -36,6 +36,18 @@ Có thể tải CSV mẫu từ giao diện. Các cột ID nhập dưới dạng 
 trong `IDS_mapping.csv`; nếu CSV có `readmitted`, cột đó sẽ bị bỏ qua. Kết quả
 CSV có dự đoán và xác suất của từng mô hình cùng kết luận tổng hợp theo đa số
 phiếu. Trường hợp hai mô hình dự đoán mỗi lớp được ghi là không đồng thuận.
+Ở tab một bệnh nhân, giao diện còn hiển thị SHAP cục bộ của LightGBM: đóng
+góp của từng đặc trưng vào xác suất tái nhập viện, tính bằng điểm phần trăm
+so với xác suất nền của 100 bản ghi lấy cân bằng giữa hai lớp, kèm biểu đồ
+Waterfall để thấy từng đóng góp đẩy xác suất từ mức nền tới dự đoán.
+Tab SHAP toàn cục tính trung bình trị tuyệt đối SHAP trên mẫu tối đa 1.000
+bản ghi ngẫu nhiên từ dữ liệu của bài, giữ phân bố lớp gốc để xếp hạng mức độ
+ảnh hưởng của các đặc trưng. Biểu đồ Beeswarm cho 20 đặc trưng đã mã hóa
+quan trọng nhất biết giá trị cao/thấp tác động theo hướng nào; màu đỏ/xanh
+tương ứng giá trị cao/thấp, và với cột one-hot biểu thị có/không thuộc nhóm
+giá trị trong tên cột. Tab cũng có dependence plot cho `number_inpatient`,
+thể hiện SHAP theo số lượt nhập viện cùng mức đóng góp SHAP trung bình tại
+mỗi số lượt.
 
 ## Phân tích hai bài toán tái nhập viện
 
@@ -44,6 +56,12 @@ phiếu. Trường hợp hai mô hình dự đoán mỗi lớp được ghi là 
 “Quy trình mô hình hóa đã hiệu chỉnh”. Logic huấn luyện và đánh giá nằm trong
 `src/research_analysis.py`. Quy trình dùng chung phép chia theo `patient_nbr`,
 chọn đặc trưng trên validation và chỉ dùng test holdout cho đánh giá cuối cùng.
+
+Để tính AUC và Recall theo `race`, `gender`, `age` cùng khoảng tin cậy
+bootstrap 95%, chạy `python src\frontend\evaluate_subgroups.py`. Phân tích
+dùng holdout chia theo bệnh nhân, mô hình LightGBM và ngưỡng dự đoán 0,5;
+khoảng tin cậy bootstrap lấy mẫu theo cụm bệnh nhân. Kết quả được lưu ở
+`code\subgroup_metrics.csv`.
 
 ## Thành viên
 

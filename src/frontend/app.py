@@ -6,6 +6,7 @@ import joblib
 import pandas as pd
 import streamlit as st
 
+from explainability import explain_local_prediction
 from modeling import (
     ID_MAPPINGS,
     INPUT_COLUMNS,
@@ -16,10 +17,17 @@ from modeling import (
     model_file_path,
     predict_all,
     predict_return_timing,
+    target_to_binary,
+)
+from explainability import (
+    create_local_waterfall,
+    explain_global_beeswarm,
+    explain_local_prediction,
 )
 
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
+DATA_PATH = ROOT_DIR / "src" / "data" / "diabetic_data.csv"
 MODELS_DIR = ROOT_DIR / "code" / "models"
 METRICS_PATH = MODELS_DIR / "model_metrics.json"
 
@@ -64,6 +72,7 @@ DEFAULTS = {
     "number_inpatient": 0,
     "number_diagnoses": 5,
 }
+GLOBAL_SHAP_SAMPLE_SIZE = 1000
 
 
 @st.cache_resource
@@ -100,6 +109,30 @@ def load_model_metrics() -> dict:
     if not METRICS_PATH.is_file():
         return {}
     return json.loads(METRICS_PATH.read_text(encoding="utf-8"))
+
+
+@st.cache_data
+def load_shap_background() -> pd.DataFrame:
+    data = pd.read_csv(DATA_PATH, low_memory=False)
+    target = target_to_binary(data["readmitted"])
+    samples = []
+    for label in (0, 1):
+        class_rows = data.loc[target.eq(label)]
+        if len(class_rows) < 50:
+            raise ValueError(
+                "Cần ít nhất 50 bản ghi cho mỗi lớp để tạo nền SHAP."
+            )
+        samples.append(class_rows.sample(n=50, random_state=42))
+    return build_feature_frame(pd.concat(samples))
+
+
+@st.cache_data
+def load_shap_global_sample() -> pd.DataFrame:
+    data = pd.read_csv(DATA_PATH, low_memory=False)
+    sample = data.sample(
+        n=min(GLOBAL_SHAP_SAMPLE_SIZE, len(data)), random_state=42
+    )
+    return build_feature_frame(sample)
 
 
 def format_model_results(predictions: pd.DataFrame) -> pd.DataFrame:
@@ -320,6 +353,79 @@ def render_single_prediction(models: dict, metrics: dict) -> None:
         + best_model_summary(metrics)
     )
 
+    try:
+        contributions, baseline, probability = explain_local_prediction(
+            models["LightGBM"], features, load_shap_background()
+        )
+    except (FileNotFoundError, ValueError, KeyError) as error:
+        st.error(f"Không thể tạo giải thích SHAP: {error}")
+        return
+
+    st.subheader("Giải thích cục bộ bằng SHAP (LightGBM)")
+    st.caption(
+        "SHAP phân rã xác suất tái nhập viện của bệnh nhân thành đóng góp "
+        "của từng đặc trưng. Mỗi biến số có đơn vị điểm phần trăm; đặc trưng "
+        "dương làm tăng, đặc trưng âm làm giảm xác suất so với mức nền."
+    )
+    try:
+        waterfall = create_local_waterfall(
+            contributions, baseline, features
+        )
+    except ValueError as error:
+        st.error(f"Không thể tạo Waterfall SHAP: {error}")
+        return
+    st.markdown(
+        "**Waterfall SHAP cho bệnh nhân nguy cơ cao**"
+        if probability >= 0.5
+        else "**Waterfall SHAP cho bệnh nhân này**"
+    )
+    st.caption(
+        "Điểm bắt đầu là xác suất nền; các thanh đỏ/xanh lần lượt đẩy xác "
+        "suất lên/xuống đến dự đoán của LightGBM. Mốc nguy cơ cao ở đây là "
+        "LightGBM dự đoán lớp tái nhập viện (xác suất từ 50%)."
+    )
+    st.image(waterfall, width="stretch")
+    baseline_column, prediction_column = st.columns(2)
+    baseline_column.metric("Xác suất nền", f"{baseline:.1%}")
+    prediction_column.metric("Xác suất dự đoán", f"{probability:.1%}")
+
+    local_explanation = pd.DataFrame(
+        {
+            "Đặc trưng": contributions.index,
+            "Giá trị bệnh nhân": [
+                str(features.iloc[0][column])
+                for column in contributions.index
+            ],
+            "Đóng góp (điểm %)": contributions.to_numpy() * 100,
+        }
+    )
+    local_explanation["Hướng tác động"] = local_explanation[
+        "Đóng góp (điểm %)"
+    ].map(
+        lambda value: (
+            "Tăng nguy cơ"
+            if value > 0
+            else "Giảm nguy cơ"
+            if value < 0
+            else "Không đổi"
+        )
+    )
+    local_explanation = local_explanation.reindex(
+        local_explanation["Đóng góp (điểm %)"]
+        .abs()
+        .sort_values(ascending=False)
+        .index
+    )
+    st.dataframe(
+        local_explanation.style.format({"Đóng góp (điểm %)": "{:+.2f}"}),
+        width="stretch",
+        hide_index=True,
+    )
+    st.caption(
+        "Xác suất dự đoán = xác suất nền + tổng đóng góp SHAP. "
+        "Đây là giải thích hành vi của mô hình, không khẳng định quan hệ nhân quả."
+    )
+
 
 def render_batch_prediction(models: dict, metrics: dict) -> None:
     st.subheader("Dự đoán hàng loạt từ CSV")
@@ -327,7 +433,9 @@ def render_batch_prediction(models: dict, metrics: dict) -> None:
         "CSV cần có đầy đủ các thuộc tính đầu vào của bộ dữ liệu gốc. "
         "Có thể tải mẫu để xem tên cột và cách ghi giá trị."
     )
-    template = pd.DataFrame([{column: "" for column in INPUT_COLUMNS}])
+    template = pd.DataFrame(
+        [{column: "" for column in INPUT_COLUMNS}], dtype=object
+    )
     template.loc[0, "age"] = "[70-80)"
     template.loc[0, "admission_type_id"] = 1
     template.loc[0, "discharge_disposition_id"] = 1
@@ -434,6 +542,121 @@ def render_batch_prediction(models: dict, metrics: dict) -> None:
     )
 
 
+def render_global_shap(models: dict) -> None:
+    st.subheader("SHAP toàn cục (LightGBM)")
+    st.write(
+        "Mức độ ảnh hưởng tổng thể của từng đặc trưng được đo bằng trung "
+        "bình trị tuyệt đối SHAP trên một mẫu ngẫu nhiên đại diện từ dữ liệu "
+        "của bài. Giá trị lớn biểu thị ảnh hưởng mạnh hơn; biểu đồ không thể "
+        "hiện hướng tác động cho từng giá trị cụ thể."
+    )
+    st.caption(
+        f"Mẫu phân tích gồm tối đa {GLOBAL_SHAP_SAMPLE_SIZE:,} bản ghi, "
+        "lấy theo phân bố lớp gốc; nền SHAP gồm 100 bản ghi cân bằng hai lớp. "
+        "Các cột one-hot được gộp về đặc trưng ban đầu."
+    )
+
+    if st.button("Tính SHAP toàn cục", key="calculate_global_shap"):
+        try:
+            (
+                importance,
+                beeswarm,
+                inpatient_dependence,
+                inpatient_summary,
+            ) = explain_global_beeswarm(
+                models["LightGBM"], load_shap_global_sample(),
+                load_shap_background()
+            )
+            st.session_state["global_shap_importance"] = importance
+            st.session_state["global_shap_beeswarm"] = beeswarm
+            st.session_state["inpatient_dependence"] = inpatient_dependence
+            st.session_state["inpatient_dependence_summary"] = (
+                inpatient_summary
+            )
+        except (FileNotFoundError, ValueError, KeyError) as error:
+            st.error(f"Không thể tạo SHAP toàn cục: {error}")
+            return
+
+    importance = st.session_state.get("global_shap_importance")
+    beeswarm = st.session_state.get("global_shap_beeswarm")
+    inpatient_dependence = st.session_state.get("inpatient_dependence")
+    inpatient_summary = st.session_state.get(
+        "inpatient_dependence_summary"
+    )
+    if (
+        importance is None
+        or beeswarm is None
+        or inpatient_dependence is None
+        or inpatient_summary is None
+    ):
+        st.info("Nhấn nút trên để tính và xem mức độ ảnh hưởng toàn cục.")
+        return
+
+    st.markdown("#### Dependence plot: `number_inpatient`")
+    st.caption(
+        "Mỗi chấm là một bản ghi trong mẫu 1.000 dòng; trục dọc là đóng góp "
+        "SHAP lên xác suất dự đoán (không phải xác suất cuối cùng của bệnh "
+        "nhân). Đường đỏ là SHAP trung bình tại từng số lượt: trên 0 làm "
+        "tăng, dưới 0 làm giảm xác suất do riêng đặc trưng này."
+    )
+    st.image(inpatient_dependence, width="stretch")
+    inpatient_table = (
+        inpatient_summary.rename_axis("Số lượt nhập viện")
+        .reset_index()
+        .rename(
+            columns={
+                "SHAP trung bình": "SHAP trung bình (điểm %)"
+            }
+        )
+    )
+    inpatient_table["SHAP trung bình (điểm %)"] *= 100
+    st.dataframe(
+        inpatient_table.style.format(
+            {"SHAP trung bình (điểm %)": "{:+.2f}"}
+        ),
+        width="stretch",
+        hide_index=True,
+    )
+
+    st.markdown("#### Beeswarm: chiều tác động của giá trị đặc trưng")
+    st.caption(
+        "Mỗi chấm là một bản ghi; vị trí bên phải/trái thể hiện SHAP làm "
+        "tăng/giảm xác suất tái nhập viện. Biểu đồ hiển thị 20 biến đã mã "
+        "hóa quan trọng nhất; các biến còn lại được gộp ở hàng cuối. "
+        "Đỏ biểu thị giá trị cao, xanh là "
+        "thấp. Với biến phân loại one-hot, cao/thấp tương ứng với có/không "
+        "thuộc nhóm giá trị ghi trong tên đặc trưng."
+    )
+    st.image(beeswarm, width="stretch")
+
+    st.markdown("#### Mức độ ảnh hưởng tổng thể")
+    chart_data = (
+        importance.head(15)
+        .mul(100)
+        .sort_values()
+        .rename_axis("Đặc trưng")
+        .reset_index(name="Mean |SHAP| (điểm %)")
+    )
+    st.bar_chart(
+        chart_data,
+        x="Mean |SHAP| (điểm %)",
+        y="Đặc trưng",
+        x_label="Mean |SHAP| (điểm % xác suất)",
+        y_label="Đặc trưng",
+        horizontal=True,
+        sort=False,
+    )
+    st.dataframe(
+        importance.head(15).mul(100)
+        .rename("Mean |SHAP| (điểm %)")
+        .rename_axis("Đặc trưng")
+        .reset_index()
+        .style.format({"Mean |SHAP| (điểm %)": "{:.3f}"}),
+        width="stretch",
+        hide_index=True,
+    )
+
+
 st.set_page_config(page_title="Dự đoán tái nhập viện", layout="wide")
 st.markdown(
     """
@@ -467,8 +690,12 @@ except FileNotFoundError as error:
     st.stop()
 
 metrics = load_model_metrics()
-individual_tab, batch_tab = st.tabs(["Một bệnh nhân", "Tải CSV hàng loạt"])
+individual_tab, batch_tab, global_shap_tab = st.tabs(
+    ["Một bệnh nhân", "Tải CSV hàng loạt", "SHAP toàn cục"]
+)
 with individual_tab:
     render_single_prediction(models, metrics)
 with batch_tab:
     render_batch_prediction(models, metrics)
+with global_shap_tab:
+    render_global_shap(models)

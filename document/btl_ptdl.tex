@@ -20,7 +20,7 @@
     KHOA CÔNG NGHỆ THÔNG TIN\\[0.2em]
     \rule{0.4\textwidth}{0.4pt}\\[1cm]
     
-    \LARGE\textbf{Phân tích các yếu tố và ứng dụng Học Máy dự đoán khả năng bệnh nhân tái nhập viện ở Mỹ}
+    \LARGE\textbf{Phân tích các yếu tố và ứng dụng Học Máy dự đoán khả năng bệnh nhân tái nhập viện ở Hoa Kỳ}
 \end{center}
 
 \vspace{0.25cm}
@@ -35,19 +35,16 @@
 
 \section*{Tóm tắt}
 
-Sức khỏe là một trong các yếu tố ảnh hưởng đến đời sống của con người, đặc biệt là tình trạng tái nhập viện cũng phản ánh được một phần sức khỏe của người dân.
-Với bộ dữ liệu \ref{table:description_data} là dữ liệu tới tình trạng sức khỏe và tỉ lệ tái nhập viện của bệnh nhân. Từ đó, ứng dụng các thuật toán ML để dự đoán khả 
-năng tái nhập viện bằng cách ứng dụng các thuật toán Logistic Regression, Random Forest, XGBoost, LightGBM và kết quả mang lại rất khá ổn với chỉ số Accuracy đạt 64.6\% và ROC-AUC đạt 70.9\%. Bên cạnh đó
-vẫn còn một số hạn chế mà phải cần cải thiện, đặc biệt là bộ dữ liệu cần được cập nhật phù hợp với tình trạng ở các năm gần đây hơn, ngoài ra vẫn chưa ứng dụng được các mô hình tiên tiến để nâng cao hiệu năng và khai thác hết tiềm năng dữ liệu.
+Sức khỏe là một trong các yếu tố ảnh hưởng đến đời sống của con người, đặc biệt là tình trạng tái nhập viện đã phần nào phản ánh được một phần sức khỏe của người dân.
+Nghiên cứu này sử dụng bộ dữ liệu bệnh nhân nhập viện tại 130 bệnh viện ở Hoa Kỳ để phân tích các yếu tố liên quan và xây dựng mô hình dự đoán khả năng tái nhập viện.
+Bốn thuật toán học máy được ứng dụng bao gồm Logistic Regression, Random Forest, XGBoost và LightGBM và kết quả mang lại rất khá ổn với chỉ số Accuracy đạt 65.3% và ROC-AUC đạt 70.9%. 
+Bên cạnh đó nghiên cứu vẫn còn một số hạn chế: dữ liệu chưa phản ánh tình hình y tế trong những năm gần đây và các mô hình tiên tiến hơn chưa được áp dụng để khai thác tối đa tiềm năng dữ liệu.
 
 \section*{Giới thiệu}
 
-Trong thời gian gần đây, việc tái nhập viện của bệnh nhân đã trở thành một
-vấn đề quan trọng và được quan tâm trong lĩnh vực y tế. Tái nhập viện không chỉ
-ảnh hưởng đến sức khỏe của bệnh nhân mà còn là một thách thức lớn đối với
-hệ thống chăm sóc sức khỏe. Vì thế để góp phần giải quyết vấn đề này, việc
-phân tích các yếu tố ảnh hưởng đến khả năng tái nhập viện của bệnh nhân
-và dự đoán khả năng tái nhập viện.
+Trong thời gian gần đây, tái nhập viện đã trở thành vấn đề quan trọng và được quan tâm trong lĩnh vực y tế. Hiện tượng này không chỉ
+ảnh hưởng đến sức khỏe của bệnh nhân mà còn gây áp lực đáng kể đối với
+hệ thống chăm sóc sức khỏe. Do đó, việc xác định các yếu tố ảnh hưởng đến khả năng tái nhập viện và xây dựng mô hình dự đoán có thể hỗ trợ các cơ sở y tế trong việc nhận diện sớm những nhóm bệnh nhân có nguy cơ cao.
 
 \section*{Khám phá dữ liệu}
 
@@ -57,12 +54,12 @@ và dự đoán khả năng tái nhập viện.
     \caption{Quy trình thực hiện}
 \end{figure}
 
-Về bộ dữ liệu, bộ dữ liệu được nghiên cứu và tổng hợp bởi nhóm tác giả John Clore và cộng sự. Bộ dữ liệu được tổng hợp của
-130 bệnh viện ở Mỹ, với các chỉ số như race, gender,... với hơn 100.000 dòng dữ liệu.
+Về bộ dữ liệu, bộ dữ liệu được nghiên cứu và tổng hợp bởi nhóm tác giả John Clore và cộng sự. Bộ dữ liệu được thu thập từ 
+130 bệnh viện ở Hoa Kỳ, với các chỉ số như race, gender,... với hơn 100.000 dòng dữ liệu.
 
-Kiểm tra sự phân bổ của các thuộc tính cũng là một phần quan trọng để xác định tính chính xác của dữ liệu. Dữ liệu dạng số được thể hiện thông qua các hình \ref{fig:data_overview} và \ref{fig:matrix_corr}.
+Việc kiểm tra phân bố của các thuộc tính giúp đánh giá chất lượng dữ liệu trước khi xây dựng mô hình. Dữ liệu dạng số được thể hiện thông qua các hình \ref{fig:data_overview} và \ref{fig:matrix_corr}.
 
-\begin{figure}[H]
+\begin{figure}[H]GroupKFold là một biến thể của K-Fold Cross-Validation, đảm bảo rằng cùng một nhóm (group) dữ liệu sẽ không bao giờ xuất hiện đồng thời ở cả tập Huấn luyện (Train) và tập Kiểm thử (Test).
     \centering
     \begin{subfigure}{0.48\textwidth}
         \centering
@@ -88,8 +85,7 @@ Kiểm tra sự phân bổ của các thuộc tính cũng là một phần quan 
     \label{fig:matrix_corr}
 \end{figure}
 
-Ngoài ra cũng có thể thấy rằng, mối tương quan rất lớn giữa \texttt{number\_inpatient} và \texttt{readmitted}. Từ đây cũng phản ánh một vấn đề thực tế rằng, một bệnh nhân nếu
-họ nhiều lần nhập viện (không kể lý do) thì khả năng tái nhập viện của họ rất cao.
+Ngoài ra cũng có thể thấy rằng, mối tương quan rất lớn giữa \texttt{number\_inpatient} và \texttt{readmitted}. Từ đây cũng phản ánh một vấn đề thực tế rằng, một bệnh nhân từng nhập viện nhiều lần (không kể lý do) thì khả năng tái nhập viện của họ cao hơn.
 
 \begin{figure}[H]
     \centering
@@ -97,13 +93,13 @@ họ nhiều lần nhập viện (không kể lý do) thì khả năng tái nh�
     \caption{Mối tương quan giữa "inpatient" và "readmitted"}
 \end{figure}
 
-Và như được đề cập, vì bộ dữ liệu có hiện tượng bị mất mát dữ liệu và trong quá trình kiểm tra các dữ liệu bị missing được thay bằng
-"?". Với dữ liệu với mục tiêu bao gồm các nhãn: ["No", "<30", ">30"], thì đây là bài toán phân loại đa lớp nhưng với số lượng nhãn hiện tại thì
+Và như được đề cập, vì bộ dữ liệu tồn tại hiện tượng thiếu giá trị và trong quá trình kiểm tra các dữ liệu bị missing được mã hóa bằng
+"?". Biến mục tiêu bao gồm các nhãn: ["No", "<30", ">30"], do đó đây là bài toán phân loại đa lớp nhưng với số lượng nhãn hiện tại thì
 rất khó để làm phân loại đa lớp, như hình sau \ref{fig:target_distribution}.
 
 \section*{Phương pháp}
 
-Để xử lý các giá trị missing, chuyển đổi các giá trị đang là "?" thành giá trị rỗng(NULL/None) để xử lý, ngoài ra các đặc trưng bị missing value nhiều như hình \ref{fig:missing_value} thì sẽ thực hiện bỏ thuộc tính đó để tránh gây ra tình trạng 
+Để xử lý các giá trị missing, chuyển đổi các giá trị đang là "?" thành giá trị rỗng(NULL/None), ngoài ra các đặc trưng bị missing value nhiều như hình \ref{fig:missing_value} thì sẽ thực hiện bỏ thuộc tính đó để tránh gây ra tình trạng 
 sai lệch dữ liệu.
 
 Ứng dụng phương pháp "SelectKBest" để tìm ra các thuộc tính ảnh hưởng đến mô hình. Bên dưới là một số Feature được lựa chọn:
@@ -117,6 +113,7 @@ sai lệch dữ liệu.
 Xây dựng quy trình để Tiền xử lý cho loại dữ liệu dạng Numeric và Category. Đối với dữ liệu dạng số thực hiện xử lý các giá trị rỗng bằng giá trị trung vị, và dạng Category là tần suất xuất hiện nhiều nhất. Các model được lựa chọn để thử nghiệm là
 Logistic Regression, Random Forest, XGBoost, LightGBM, và thực hiện một phép thử nhiều mô hình với Lazy Predict. 
 
+Để đánh giá hiệu năng theo nhóm nhân khẩu học, chúng tôi tính AUC và Recall riêng theo race, gender và age trên tập holdout chia nhóm theo \texttt{patient\_nbr}. Phân tích dùng LightGBM có ROC-AUC cao nhất và ngưỡng phân loại mặc định 0,5. Khoảng tin cậy 95\% được ước lượng bằng 2.000 lần bootstrap percentile theo cụm bệnh nhân, nhằm giữ các lượt khám của cùng bệnh nhân trong cùng cụm lấy mẫu. AUC không xác định nếu một nhóm chỉ có một lớp; Recall không xác định nếu nhóm không có ca dương tính.
 
 \section*{Kết quả}
 \begin{table}[H]
@@ -160,7 +157,7 @@ Logistic Regression, Random Forest, XGBoost, LightGBM, và thực hiện một p
     \caption{So sánh các mô hình dựa trên các chỉ số ROC và AUC}
 \end{figure}
 
-Vì thế việc lựa chọn mô hình đều tùy thuộc vào nhu cầu như khả năng chính xác cao hay tỉ lệ bỏ sót thấp.
+Vì thế việc lựa chọn mô hình phụ thuộc vào mục tiêu ưng dụng: ưu tiện độ chính xác của các cảnh báo (Precision cao) hay ưu tiên hạn chế bỏ sót các ca tái nhập viện (Recall cao).
 
 \section*{Kết luận}
 Từ kết quả trên, các mô hình học dữ liệu khá tốt và đối với các mô hình dạng cây như LightGBM, XGBoost sẽ học tốt hơn đặc biệt đạt hiệu năng cao trên "All Feature". Ngược lại, các mô hình hồi quy
@@ -175,4 +172,3 @@ Từ những nghiên cứu trên, trong tương lai nếu bộ dữ liệu có c
 1. Link Source: https:\/\/github.com\/ThietBuiCong\/BTL\_PTDL.git
 
 \end{document}
-

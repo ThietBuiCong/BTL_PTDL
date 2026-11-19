@@ -8,3 +8,4 @@ streamlit
 xgboost
 lightgbm
 lazypredict
+shap
