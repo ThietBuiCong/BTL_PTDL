@@ -52,15 +52,15 @@
   "training_rows": 101766,
   "test_rows": 20153,
   "patient_group_split": true,
-  "sklearn_version": "1.9.0",
+  "sklearn_version": "1.9.1",
   "best_model_by_roc_auc": "LightGBM",
   "metrics": {
     "Logistic Regression": {
-      "Balanced accuracy": 0.6357585297690236,
-      "Precision": 0.5960063058328954,
-      "Recall": 0.6205274100010942,
-      "F1": 0.6080197276723491,
-      "ROC-AUC": 0.698489789268989
+      "Balanced accuracy": 0.6357038191879971,
+      "Precision": 0.5959638427580408,
+      "Recall": 0.6204179888390414,
+      "F1": 0.6079451026644508,
+      "ROC-AUC": 0.6984883089935989
     },
     "Random Forest": {
       "Balanced accuracy": 0.6310539364069321,

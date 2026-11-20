@@ -691,7 +691,7 @@ except FileNotFoundError as error:
 
 metrics = load_model_metrics()
 individual_tab, batch_tab, global_shap_tab = st.tabs(
-    ["Một bệnh nhân", "Tải CSV hàng loạt", "SHAP toàn cục"]
+    ["Một bệnh nhân", "Tải CSV hàng loạt", ""]
 )
 with individual_tab:
     render_single_prediction(models, metrics)
